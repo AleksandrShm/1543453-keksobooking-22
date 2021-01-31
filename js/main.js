@@ -7,14 +7,8 @@ const getRandomInt = (min, max) => {
     return NaN;
   }
   // если введены некорректные значения, возвращаем undefined
-  if (min < 0 || max < 0 || (min === max)) {
+  if (min < 0 || max < 0 || (min === max) || min > max) {
     return undefined;
-  }
-  // если min > max, меняем их местами
-  if (min > max) {
-    let temp = min;
-    min = max;
-    max = temp;
   }
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -28,16 +22,12 @@ const getRandomFloat = (min, max, level = 0) => {
     return NaN;
   }
   // если введены некорректные значения или level не целое число, возвращаем undefined
-  if (min < 0 || max < 0 || (min === max) || level < 0 || !(level % 1 === 0)) {
+  if (min < 0 || max < 0 || (min === max) || min > max || level < 0 || !(level % 1 === 0)) {
     return undefined;
-  }
-  // если min > max, меняем их местами
-  if (min > max) {
-    let temp = min;
-    min = max;
-    max = temp;
   }
   min = Math.ceil(min * Math.pow(10, level));
   max = Math.floor(max * Math.pow(10, level));
   return +((Math.floor(Math.random() * (max - min + 1)) + min) * Math.pow(10, -level)).toFixed(level);
 }
+
+console.log(getRandomInt(50,10));
