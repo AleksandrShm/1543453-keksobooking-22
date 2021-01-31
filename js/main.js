@@ -1,6 +1,7 @@
 'use strict';
 
 // Возвращает случайное целое число из переданного диапазона включительно
+/* eslint-disable-next-line */
 const getRandomInt = (min, max) => {
   // если min, max не число, взвращаем NaN
   if (!(typeof min === 'number') || !(typeof max === 'number')) {
@@ -16,6 +17,7 @@ const getRandomInt = (min, max) => {
 }
 
 // Возвращает случайное число с плавающей точкой из переданного диапазона включительно с указанным кол-вом знаков после запятой
+/* eslint-disable-next-line */
 const getRandomFloat = (min, max, level = 0) => {
   // если min, max, level не число, взвращаем NaN
   if (!(typeof min === 'number') || !(typeof max === 'number') || !(typeof level === 'number')) {
