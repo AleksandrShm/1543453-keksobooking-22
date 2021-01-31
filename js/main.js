@@ -29,5 +29,3 @@ const getRandomFloat = (min, max, level = 0) => {
   max = Math.floor(max * Math.pow(10, level));
   return +((Math.floor(Math.random() * (max - min + 1)) + min) * Math.pow(10, -level)).toFixed(level);
 }
-
-console.log(getRandomInt(50,10));
