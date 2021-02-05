@@ -36,7 +36,8 @@ const getRandomArray = (sourceArray, maxLength = sourceArray.length) => {
   const tempArray = sourceArray.slice();
   const randomArray = [];
   for (let i = 0; i < randomArrayLength; i++) {
-    randomArray.push((tempArray.splice(getRandomInt(0, tempArray.length - 1), 1)).join());
+    const tempArrayItem = tempArray.splice(getRandomInt(0, tempArray.length - 1), 1);
+    randomArray.push(tempArrayItem[0]);
   }
   return randomArray;
 };
@@ -86,20 +87,20 @@ const createLodgingDescription = () => {
   const locationY = getRandomFloat(MIN_LONGITUDE, MAX_LONGITUDE, COORD_PRECISION);
   return {
     author: {
-      avatar: 'img/avatars/user0' + getRandomInt(MIN_AVATAR, MAX_AVATAR) + '.png',
+      avatar: `img/avatars/user0${getRandomInt(MIN_AVATAR, MAX_AVATAR)}.png`,
     },
     offer: {
       title: 'Милая, уютная квартирка в центре Токио',
-      address: String(locationX) + ', ' + String(locationY),
+      address: `${locationX}, ${locationY}`,
       price: getRandomInt(MIN_PRICE, MAX_PRICE),
       type: LODGING_TYPES[getRandomInt(0, LODGING_TYPES.length - 1)],
       rooms: getRandomInt(MIN_ROOMS, MAX_ROOMS),
       guests: getRandomInt(MIN_GUESTS, MAX_GUESTS),
       checkin: TIME_LIMITS[getRandomInt(0, TIME_LIMITS.length - 1)],
       checkout: TIME_LIMITS[getRandomInt(0, TIME_LIMITS.length - 1)],
-      features: getRandomArray(ALL_FEATURES, ALL_FEATURES.length),
+      features: getRandomArray(ALL_FEATURES),
       description: 'Прекрасная инфраструктура вокруг: театры и музеи, супермаркеты и магазины, салоны красоты и фитнес-клубы, офисы банков, рестораны и кафе, скверы и парки.',
-      photos: getRandomArray(ALL_PHOTOS, ALL_PHOTOS.length),
+      photos: getRandomArray(ALL_PHOTOS),
     },
     location: {
       x: locationX,
@@ -108,4 +109,4 @@ const createLodgingDescription = () => {
   };
 };
 /* eslint-disable-next-line */
-const lodgingDescriptions = new Array(LODGING_DESCRIPTION_COUNT).fill(null).map(() => createLodgingDescription());
+const lodgingDescriptions = new Array(LODGING_DESCRIPTION_COUNT).fill(null).map(createLodgingDescription);
