@@ -67,6 +67,8 @@ const createLodgingDescription = () => {
   };
 };
 
-const lodgingDescriptions = new Array(LODGING_DESCRIPTION_COUNT).fill(null).map(createLodgingDescription);
+const getLodgingDescriptions = () => {
+  return new Array(LODGING_DESCRIPTION_COUNT).fill(null).map(createLodgingDescription);
+}
 
-export {lodgingDescriptions};
+export {getLodgingDescriptions};
