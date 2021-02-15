@@ -72,3 +72,4 @@ const getLodgingDescriptions = () => {
 }
 
 export {getLodgingDescriptions};
+export {ALL_FEATURES};

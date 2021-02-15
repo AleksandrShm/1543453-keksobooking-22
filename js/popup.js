@@ -1,4 +1,5 @@
 import {getLodgingDescriptions} from './data.js';
+import {ALL_FEATURES} from './data.js';
 
 const lodgingDescriptions = getLodgingDescriptions();
 const mapCanvas = document.querySelector('#map-canvas');
@@ -8,79 +9,71 @@ const cards = document.createDocumentFragment();
 const listFeatures = templateCard.querySelector('.popup__features');
 const templatePhoto = templateCard.querySelector('.popup__photo');
 
-const getCyrillicType = (lodgingType) => {
-  switch (lodgingType) {
-    case 'flat':
-      return 'Квартира';
-    case 'bungalow':
-      return 'Бунгало';
-    case 'house':
-      return 'Дом';
-    case 'palace':
-      return 'Дворец';
-  }
-};
+const placesMap = {
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+}
 
-const createListFeatures = (featuresArray) => {
+const createListFeatures = (arrayFeatures) => {
   const fragmentFeatures = document.createDocumentFragment();
-  for (let i = 0; i < featuresArray.length; i++) {
-    switch (featuresArray[i]) {
-      case 'wifi':
-        fragmentFeatures.appendChild(listFeatures.children[0].cloneNode(true));
-        break;
-      case 'dishwasher':
-        fragmentFeatures.appendChild(listFeatures.children[1].cloneNode(true));
-        break;
-      case 'parking':
-        fragmentFeatures.appendChild(listFeatures.children[2].cloneNode(true));
-        break;
-      case 'washer':
-        fragmentFeatures.appendChild(listFeatures.children[3].cloneNode(true));
-        break;
-      case 'elevator':
-        fragmentFeatures.appendChild(listFeatures.children[4].cloneNode(true));
-        break;
-      case 'conditioner':
-        fragmentFeatures.appendChild(listFeatures.children[5].cloneNode(true));
-        break;
-    }
-  }
+  arrayFeatures.forEach((featureItem) => {
+    const indexFeaturesChild = ALL_FEATURES.indexOf(featureItem);
+    fragmentFeatures.appendChild(listFeatures.children[indexFeaturesChild].cloneNode(true));
+  });
   return fragmentFeatures;
 }
 
-const createListPhotos = (photoArray) => {
+const createListPhotos = (arrayPhotos) => {
   const fragmentPhotos = document.createDocumentFragment();
-  for (let i = 0; i < photoArray.length; i++) {
+  arrayPhotos.forEach((photoItem) => {
     fragmentPhotos.appendChild(templatePhoto.cloneNode(true));
-    fragmentPhotos.childNodes[i].src = photoArray[i];
-  }
+    fragmentPhotos.lastChild.src = photoItem;
+  });
   return fragmentPhotos;
 }
 
-for (let i = 0; i < lodgingDescriptions.length; i++) {
-  const cardElement = card.cloneNode(true);
-  cardElement.classList.add(`popup-${i+1}`);
-  cardElement.querySelector('.popup__title').textContent = lodgingDescriptions[i].offer.title;
-  cardElement.querySelector('.popup__text--address').textContent = lodgingDescriptions[i].offer.address;
-  cardElement.querySelector('.popup__text--price').textContent = `${lodgingDescriptions[i].offer.price} ₽/ночь`;
-  cardElement.querySelector('.popup__type').textContent = getCyrillicType(lodgingDescriptions[i].offer.type);
-  cardElement.querySelector('.popup__text--capacity').textContent = `${lodgingDescriptions[i].offer.rooms} комнаты для ${lodgingDescriptions[i].offer.guests} гостей`;
-  cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${lodgingDescriptions[i].offer.checkin}, выезд до ${lodgingDescriptions[i].offer.checkout}`;
-  //удаляем шаблонные features из склонированного шаблона
-  while (cardElement.querySelector('.popup__features').firstChild) {
-    cardElement.querySelector('.popup__features').removeChild(cardElement.querySelector('.popup__features').firstChild);
+//удаляет все Child-элементы переданного Parent-элемента (например шаблонные)
+const clearAllChild = (parentElement) => {
+  while (parentElement.firstChild) {
+    parentElement.removeChild(parentElement.firstChild);
   }
-  //добавляем актуальные features из шаблона в разметку склонированного шаблона через функцию createListFeatures (в соответствии с переданным массивом)
-  cardElement.querySelector('.popup__features').appendChild(createListFeatures(lodgingDescriptions[i].offer.features));
-  cardElement.querySelector('.popup__description').textContent = lodgingDescriptions[i].offer.description;
-  //удаляем шаблонные img из склонированного шаблона
-  while (cardElement.querySelector('.popup__photos').firstChild) {
-    cardElement.querySelector('.popup__photos').removeChild(cardElement.querySelector('.popup__photos').firstChild);
-  }
-  //добавляем актуальные img через функцию из массива
-  cardElement.querySelector('.popup__photos').appendChild(createListPhotos(lodgingDescriptions[i].offer.photos));
-  cardElement.querySelector('.popup__avatar').src = lodgingDescriptions[i].author.avatar;
-  cards.appendChild(cardElement);
 }
+
+lodgingDescriptions.forEach((lodgingDescriptionItem, index) => {
+  const cardElement = card.cloneNode(true);
+  const {author, offer} = lodgingDescriptionItem;
+  const {avatar} = author;
+  const {title, address, price, type, rooms: roomNumber, guests: guestNumber, checkin, checkout, features, description, photos} = offer;
+  const popupTitle = cardElement.querySelector('.popup__title');
+  const popupTextAddress = cardElement.querySelector('.popup__text--address');
+  const popupTextPrice = cardElement.querySelector('.popup__text--price');
+  const popupType = cardElement.querySelector('.popup__type');
+  const popupTextCapacity = cardElement.querySelector('.popup__text--capacity');
+  const popupTextTime = cardElement.querySelector('.popup__text--time');
+  const popupFeatures = cardElement.querySelector('.popup__features');
+  const popupDescription = cardElement.querySelector('.popup__description');
+  const popupPhotos = cardElement.querySelector('.popup__photos');
+  const popupAvatar = cardElement.querySelector('.popup__avatar');
+  cardElement.classList.add(`popup-${index+1}`);
+  popupTitle.textContent = title;
+  popupTextAddress.textContent = address;
+  popupTextPrice.textContent = `${price} ₽/ночь`;
+  popupType.textContent = placesMap[type];
+  popupTextCapacity.textContent = `${roomNumber} комнаты для ${guestNumber} гостей`;
+  popupTextTime.textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
+  //удаляем шаблонные features из склонированного шаблона функцией clearAllChild
+  clearAllChild(popupFeatures);
+  //добавляем актуальные features из шаблона в разметку склонированного шаблона через функцию createListFeatures (в соответствии с переданным массивом)
+  popupFeatures.appendChild(createListFeatures(features));
+  popupDescription.textContent = description;
+  //удаляем шаблонные img из склонированного шаблона функцией clearAllChild
+  clearAllChild(popupPhotos);
+  //добавляем актуальные img через функцию из массива
+  popupPhotos.appendChild(createListPhotos(photos));
+  popupAvatar.src = avatar;
+  cards.appendChild(cardElement);
+});
 
 mapCanvas.appendChild(cards.childNodes[0]);
