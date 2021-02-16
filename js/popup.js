@@ -16,18 +16,18 @@ const placesMap = {
   palace: 'Дворец',
 }
 
-const createListFeatures = (arrayFeatures) => {
+const createListFeatures = (features) => {
   const fragmentFeatures = document.createDocumentFragment();
-  arrayFeatures.forEach((featureItem) => {
+  features.forEach((featureItem) => {
     const indexFeaturesChild = ALL_FEATURES.indexOf(featureItem);
     fragmentFeatures.appendChild(listFeatures.children[indexFeaturesChild].cloneNode(true));
   });
   return fragmentFeatures;
 }
 
-const createListPhotos = (arrayPhotos) => {
+const createListPhotos = (photos) => {
   const fragmentPhotos = document.createDocumentFragment();
-  arrayPhotos.forEach((photoItem) => {
+  photos.forEach((photoItem) => {
     fragmentPhotos.appendChild(templatePhoto.cloneNode(true));
     fragmentPhotos.lastChild.src = photoItem;
   });
@@ -37,7 +37,7 @@ const createListPhotos = (arrayPhotos) => {
 //удаляет все Child-элементы переданного Parent-элемента (например шаблонные)
 const clearAllChild = (parentElement) => {
   while (parentElement.firstChild) {
-    parentElement.removeChild(parentElement.firstChild);
+    parentElement.removeChild(parentElement.lastChild);
   }
 }
 
@@ -45,7 +45,7 @@ lodgingDescriptions.forEach((lodgingDescriptionItem, index) => {
   const cardElement = card.cloneNode(true);
   const {author, offer} = lodgingDescriptionItem;
   const {avatar} = author;
-  const {title, address, price, type, rooms: roomNumber, guests: guestNumber, checkin, checkout, features, description, photos} = offer;
+  const {title, address, price, type, rooms, guests, checkin, checkout, features, description, photos} = offer;
   const popupTitle = cardElement.querySelector('.popup__title');
   const popupTextAddress = cardElement.querySelector('.popup__text--address');
   const popupTextPrice = cardElement.querySelector('.popup__text--price');
@@ -61,7 +61,7 @@ lodgingDescriptions.forEach((lodgingDescriptionItem, index) => {
   popupTextAddress.textContent = address;
   popupTextPrice.textContent = `${price} ₽/ночь`;
   popupType.textContent = placesMap[type];
-  popupTextCapacity.textContent = `${roomNumber} комнаты для ${guestNumber} гостей`;
+  popupTextCapacity.textContent = `${rooms} комнаты для ${guests} гостей`;
   popupTextTime.textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
   //удаляем шаблонные features из склонированного шаблона функцией clearAllChild
   clearAllChild(popupFeatures);
