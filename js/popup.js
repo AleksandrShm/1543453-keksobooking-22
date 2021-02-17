@@ -2,7 +2,6 @@ import {getLodgingDescriptions} from './data.js';
 import {ALL_FEATURES} from './data.js';
 
 const lodgingDescriptions = getLodgingDescriptions();
-const mapCanvas = document.querySelector('#map-canvas');
 const templateCard = document.querySelector('#card').content;
 const card = templateCard.querySelector('article');
 const cards = document.createDocumentFragment();
@@ -76,4 +75,5 @@ lodgingDescriptions.forEach((lodgingDescriptionItem, index) => {
   cards.appendChild(cardElement);
 });
 
-mapCanvas.appendChild(cards.childNodes[0]);
+export {lodgingDescriptions};
+export {cards};
