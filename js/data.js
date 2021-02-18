@@ -71,5 +71,4 @@ const getLodgingDescriptions = () => {
   return new Array(LODGING_DESCRIPTION_COUNT).fill(null).map(createLodgingDescription);
 }
 
-export {getLodgingDescriptions};
-export {ALL_FEATURES};
+export {getLodgingDescriptions, ALL_FEATURES};

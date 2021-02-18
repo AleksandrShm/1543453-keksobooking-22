@@ -40,4 +40,25 @@ const getRandomArray = (sourceArray, maxLength = sourceArray.length) => {
   return randomArray;
 };
 
-export {getRandomInt, getRandomFloat, getRandomArray};
+//удаляет все Child-элементы переданного Parent-элемента (например шаблонные)
+const clearAllChild = (parentElement) => {
+  while (parentElement.firstChild) {
+    parentElement.removeChild(parentElement.lastChild);
+  }
+};
+
+//устанавливает атрибут "disabled = true" всем элементам коллекции
+const setElementsDisabled = (elements) => {
+  elements.forEach((element) => {
+    element.setAttribute('disabled', true);
+  });
+};
+
+//удаляет атрибут disabled у всех элементов переданной коллекции
+const removeElementsDisabled = (elements) => {
+  elements.forEach((element) => {
+    element.removeAttribute('disabled');
+  });
+};
+
+export {getRandomInt, getRandomFloat, getRandomArray, clearAllChild, setElementsDisabled, removeElementsDisabled};

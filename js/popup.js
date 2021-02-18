@@ -1,5 +1,5 @@
-import {getLodgingDescriptions} from './data.js';
-import {ALL_FEATURES} from './data.js';
+import {clearAllChild} from './utils.js';
+import {getLodgingDescriptions, ALL_FEATURES} from './data.js';
 
 const lodgingDescriptions = getLodgingDescriptions();
 const templateCard = document.querySelector('#card').content;
@@ -31,13 +31,6 @@ const createListPhotos = (photos) => {
     fragmentPhotos.lastChild.src = photoItem;
   });
   return fragmentPhotos;
-}
-
-//удаляет все Child-элементы переданного Parent-элемента (например шаблонные)
-const clearAllChild = (parentElement) => {
-  while (parentElement.firstChild) {
-    parentElement.removeChild(parentElement.lastChild);
-  }
 }
 
 lodgingDescriptions.forEach((lodgingDescriptionItem, index) => {
@@ -75,5 +68,4 @@ lodgingDescriptions.forEach((lodgingDescriptionItem, index) => {
   cards.appendChild(cardElement);
 });
 
-export {lodgingDescriptions};
-export {cards};
+export {lodgingDescriptions, cards};
