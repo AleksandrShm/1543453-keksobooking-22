@@ -1,7 +1,6 @@
 import {clearAllChild} from './utils.js';
-import {getLodgingDescriptions, ALL_FEATURES} from './data.js';
+import {lodgingDescriptions, ALL_FEATURES} from './data.js';
 
-const lodgingDescriptions = getLodgingDescriptions();
 const templateCard = document.querySelector('#card').content;
 const card = templateCard.querySelector('article');
 const cards = document.createDocumentFragment();
@@ -68,4 +67,4 @@ lodgingDescriptions.forEach((lodgingDescriptionItem, index) => {
   cards.appendChild(cardElement);
 });
 
-export {lodgingDescriptions, cards};
+export {cards};

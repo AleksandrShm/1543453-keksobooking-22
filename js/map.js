@@ -1,6 +1,7 @@
 /* global L:readonly */
 import {setElementsDisabled, removeElementsDisabled} from './utils.js';
-import {lodgingDescriptions, cards} from './popup.js';
+import {cards} from './popup.js';
+import {lodgingDescriptions} from './data.js';
 
 const CENTER_LATITUDE = 35.68000;
 const CENTER_LONGITUDE = 139.76000;
