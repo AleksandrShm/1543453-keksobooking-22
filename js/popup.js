@@ -1,8 +1,6 @@
-import {getLodgingDescriptions} from './data.js';
-import {ALL_FEATURES} from './data.js';
+import {clearAllChild} from './utils.js';
+import {lodgingDescriptions, ALL_FEATURES} from './data.js';
 
-const lodgingDescriptions = getLodgingDescriptions();
-const mapCanvas = document.querySelector('#map-canvas');
 const templateCard = document.querySelector('#card').content;
 const card = templateCard.querySelector('article');
 const cards = document.createDocumentFragment();
@@ -32,13 +30,6 @@ const createListPhotos = (photos) => {
     fragmentPhotos.lastChild.src = photoItem;
   });
   return fragmentPhotos;
-}
-
-//удаляет все Child-элементы переданного Parent-элемента (например шаблонные)
-const clearAllChild = (parentElement) => {
-  while (parentElement.firstChild) {
-    parentElement.removeChild(parentElement.lastChild);
-  }
 }
 
 lodgingDescriptions.forEach((lodgingDescriptionItem, index) => {
@@ -76,4 +67,4 @@ lodgingDescriptions.forEach((lodgingDescriptionItem, index) => {
   cards.appendChild(cardElement);
 });
 
-mapCanvas.appendChild(cards.childNodes[0]);
+export {cards};
