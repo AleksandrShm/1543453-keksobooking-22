@@ -61,16 +61,4 @@ const removeElementsDisabled = (elements) => {
   });
 };
 
-// устанавливает атрибут selected="true" переданному элементу
-const setElementSelected = (element) => {
-  element.setAttribute('selected', true);
-}
-
-// удаляет атрибут selected у всех элементов переданной коллекции
-const removeElementsSelected = (elements) => {
-  elements.forEach((element) => {
-    element.removeAttribute('selected');
-  });
-}
-
-export {getRandomInt, getRandomFloat, getRandomArray, clearAllChild, setElementsDisabled, removeElementsDisabled, setElementSelected, removeElementsSelected};
+export {getRandomInt, getRandomFloat, getRandomArray, clearAllChild, setElementsDisabled, removeElementsDisabled};

@@ -1,5 +1,3 @@
-import {setElementSelected, removeElementsSelected} from './utils.js';
-
 const minPlacePrices = {
   flat: '1000',
   bungalow: '0',
@@ -8,29 +6,29 @@ const minPlacePrices = {
 };
 const form = document.querySelector('.ad-form');
 const placesTypeSelect = form.querySelector('#type');
-const priceInput = form.querySelector('#price');
-priceInput.placeholder = minPlacePrices.flat;
-priceInput.setAttribute('min', minPlacePrices.flat);
 
-// устанавливает атрибут min и placeholder в зависитмости от value (типа жилья)
+// устанавливает полю #price атрибут min и placeholder в зависитмости от value (типа жилья)
+const setMinPrice = (value) => {
+  const priceInput = form.querySelector('#price');
+  priceInput.placeholder = minPlacePrices[value];
+  priceInput.setAttribute('min', minPlacePrices[value]);
+}
+
+setMinPrice('flat');
+
 placesTypeSelect.addEventListener('change', (evt) => {
-  priceInput.setAttribute('min', minPlacePrices[evt.target.value])
-  priceInput.placeholder = minPlacePrices[evt.target.value];
+  setMinPrice(evt.target.value);
 });
 
 const timeInSelect = form.querySelector('#timein');
 const timeOutSelect = form.querySelector('#timeout');
 
-// ищет в #timeout select option с соответствующим value, устанавливает ему selected="true"
+// синхронизирует #timeout value с новым #timein value
 timeInSelect.addEventListener('change', (evt) => {
-  removeElementsSelected(form.querySelectorAll('#timeout option'));
-  const timeOutSelectedOption = form.querySelector(`#timeout option[value="${evt.target.value}"]`);
-  setElementSelected(timeOutSelectedOption);
+  timeOutSelect.value = evt.target.value;
 });
 
-// то же, в #timein
+// синхронизирует #timein value с новым #timeout value
 timeOutSelect.addEventListener('change', (evt) => {
-  removeElementsSelected(form.querySelectorAll('#timein option'));
-  const timeInSelectedOption = form.querySelector(`#timein option[value="${evt.target.value}"]`);
-  setElementSelected(timeInSelectedOption);
+  timeInSelect.value = evt.target.value;
 });
