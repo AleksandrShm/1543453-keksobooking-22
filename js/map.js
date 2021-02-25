@@ -1,11 +1,9 @@
 /* global L:readonly */
 import {setElementsDisabled, removeElementsDisabled} from './utils.js';
-import {cards} from './popup.js';
-import {lodgingDescriptions} from './data.js';
 
 const CENTER_LATITUDE = 35.68000;
 const CENTER_LONGITUDE = 139.76000;
-const MAP_SCALE = 13;
+const MAP_SCALE = 9;
 const tileLayerUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const tileLayerCopyRight = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 const mainIconImage = {
@@ -66,7 +64,7 @@ const addTileLayerMap = (map, url, attribution) => {
 };
 
 // принимает массив с объявлениями descriptions, добавляет по координатам метки iconImage на карту с прикрепленными всплывающими карточками коллекции popups
-const addMapDescriptionsMarkersPopup = (descriptions, iconImage, popups) => {
+const addMapDescriptionsMarkersPopup = (descriptions, popups) => {
   descriptions.forEach((descriptionItem, index) => {
     const {location} = descriptionItem;
     const {url, size, anchor} = iconImage;
@@ -77,8 +75,8 @@ const addMapDescriptionsMarkersPopup = (descriptions, iconImage, popups) => {
     });
     const marker = L.marker(
       {
-        lat: location.x,
-        lng: location.y,
+        lat: location.lat,
+        lng: location.lng,
       },
       {
         icon,
@@ -118,12 +116,20 @@ const mainPinMarker = L.marker(
 mainPinMarker.addTo(map);
 
 const address = document.querySelector('#address');
-address.value = `${CENTER_LATITUDE.toFixed(5)}, ${CENTER_LONGITUDE.toFixed(5)}`;
-address.setAttribute('readonly', true);
+
+// сбрасываем адрес и маркер адреса к первоначальному значению, передвигаем маркер к начальны координатам
+const resetAddress = () => {
+  address.value = `${CENTER_LATITUDE.toFixed(5)}, ${CENTER_LONGITUDE.toFixed(5)}`;
+  address.setAttribute('readonly', true);
+  mainPinMarker.setLatLng({
+    lat: CENTER_LATITUDE,
+    lng: CENTER_LONGITUDE,
+  });
+};
 
 mainPinMarker.on('move', (evt) => {
   const newAddressForm = evt.target.getLatLng();
   address.value = `${(newAddressForm.lat).toFixed(5)}, ${(newAddressForm.lng).toFixed(5)}`;
 });
 
-addMapDescriptionsMarkersPopup(lodgingDescriptions, iconImage, cards);
+export {addMapDescriptionsMarkersPopup, resetAddress};
