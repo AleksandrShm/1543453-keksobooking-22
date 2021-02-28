@@ -66,18 +66,9 @@ const ALERT_SHOWN_TIME = 5000;
 
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
-  Object.assign(alertContainer.style, {
-    zIndex: 100,
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    right: 0,
-    padding: '10px 3px',
-    fontSize: '30px',
-    textAlign: 'center',
-    backgroundColor: 'red',
-  });
-  
+  const ALERT_CONTAINER_STYLES_CSS = 'z-index: 100; position: absolute; left: 0; top: 0; right: 0; padding: 10px 3px; font-size: 30px; text-align: center; background-color: red;';
+  alertContainer.style.cssText = ALERT_CONTAINER_STYLES_CSS;
+
   alertContainer.textContent = message;
 
   document.body.appendChild(alertContainer);

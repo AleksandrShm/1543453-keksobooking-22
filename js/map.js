@@ -138,4 +138,8 @@ const addMapMarkersWithPopups = (descriptions) => {
   addMapDescriptionsMarkersPopup(descriptions, createDescriptionsCards(descriptions));
 };
 
-export {resetAddress, addMapMarkersWithPopups};//addMapDescriptionsMarkersPopup,
+const onSuccessAddDescriptions = (descriptions) => {
+  addMapMarkersWithPopups(descriptions);
+};
+
+export {resetAddress, onSuccessAddDescriptions};

@@ -1,8 +1,7 @@
 import {setUserFormSubmit, onSuccessClear, showError} from './form.js';
-import {getData} from './api.js';
-import {showAlert} from './utils.js';
-import {addMapMarkersWithPopups} from './map.js';
+import {getData, onErrorGetDataShowAlert} from './api.js';
+import {onSuccessAddDescriptions} from './map.js';
 
-getData((descriptions) => addMapMarkersWithPopups(descriptions), () => showAlert('Ошибка при загрузке данных. Попробуйте еще раз'));
+getData(onSuccessAddDescriptions, onErrorGetDataShowAlert);
 
 setUserFormSubmit(onSuccessClear, showError);

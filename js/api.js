@@ -1,8 +1,14 @@
-const urlGetData = 'https://22.javascript.pages.academy/keksobooking/data';
-const urlSendData = 'https://22.javascript.pages.academy/keksobooking';
+import {showAlert} from './utils.js';
+
+const URL_GET_DATA = 'https://22.javascript.pages.academy/keksobooking/data';
+const URL_SEND_DATA = 'https://22.javascript.pages.academy/keksobooking';
+
+const onErrorGetDataShowAlert = () => {
+  showAlert('Ошибка при загрузке данных. Попробуйте еще раз');
+};
 
 const getData = (onSuccess, onError) => {
-  fetch(urlGetData)
+  fetch(URL_GET_DATA)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -21,7 +27,7 @@ const getData = (onSuccess, onError) => {
 const sendData = (formData, onSuccess, onError) => {
 
   fetch(
-    urlSendData,
+    URL_SEND_DATA,
     {
       method: 'POST',
       body: formData,
@@ -39,4 +45,4 @@ const sendData = (formData, onSuccess, onError) => {
     })
 }
 
-export {getData, sendData};
+export {getData, sendData, onErrorGetDataShowAlert};

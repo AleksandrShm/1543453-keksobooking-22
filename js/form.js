@@ -44,7 +44,7 @@ timeOutSelect.addEventListener('change', (evt) => {
 });
 
 // показывает сообщение success об удачной отправке данных, затем скрывает через переданное время в мс
-const showAndHideSuccess = (timeToHide) => {
+const showAndHideSuccessPopup = (timeToHide) => {
   const successPopupTemplate = document.querySelector('#success').content;
   const successPopup = successPopupTemplate.querySelector('div').cloneNode(true);
   document.body.appendChild(successPopup);
@@ -56,7 +56,7 @@ const showAndHideSuccess = (timeToHide) => {
 
 // сбрасывает форму, вызывает функцию показа сообщения success
 const onSuccessClear = () => {
-  showAndHideSuccess(2000);
+  showAndHideSuccessPopup(2000);
   resetForm();
 };
 
