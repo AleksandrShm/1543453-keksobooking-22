@@ -43,15 +43,21 @@ timeOutSelect.addEventListener('change', (evt) => {
   timeInSelect.value = evt.target.value;
 });
 
-// сбрасывает форму, показывает сообщение success об удачной отправке данных, закрывает по click
-const onSuccessClear = () => {
+// показывает сообщение success об удачной отправке данных, затем скрывает через переданное время в мс
+const showAndHideSuccess = (timeToHide) => {
   const successPopupTemplate = document.querySelector('#success').content;
   const successPopup = successPopupTemplate.querySelector('div').cloneNode(true);
   document.body.appendChild(successPopup);
-  resetForm();
+
   setTimeout(() => {
     document.body.removeChild(successPopup);
-  }, 3000);
+  }, timeToHide);
+};
+
+// сбрасывает форму, вызывает функцию показа сообщения success
+const onSuccessClear = () => {
+  showAndHideSuccess(2000);
+  resetForm();
 };
 
 // выводит сообщение error о неудачной отправке данных

@@ -1,5 +1,6 @@
 /* global L:readonly */
 import {setElementsDisabled, removeElementsDisabled} from './utils.js';
+import {createDescriptionsCards} from './popup.js';
 
 const CENTER_LATITUDE = 35.68000;
 const CENTER_LONGITUDE = 139.76000;
@@ -132,4 +133,9 @@ mainPinMarker.on('move', (evt) => {
   address.value = `${(newAddressForm.lat).toFixed(5)}, ${(newAddressForm.lng).toFixed(5)}`;
 });
 
-export {addMapDescriptionsMarkersPopup, resetAddress};
+// добавляет на карту маркеры с прикрепленными popups, принимает параметр descriptions
+const addMapMarkersWithPopups = (descriptions) => {
+  addMapDescriptionsMarkersPopup(descriptions, createDescriptionsCards(descriptions));
+};
+
+export {resetAddress, addMapMarkersWithPopups};//addMapDescriptionsMarkersPopup,

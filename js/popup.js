@@ -1,5 +1,6 @@
 import {clearAllChild} from './utils.js';
 import {ALL_FEATURES} from './data.js';
+
 const templateCard = document.querySelector('#card').content;
 const card = templateCard.querySelector('article');
 const cards = document.createDocumentFragment();

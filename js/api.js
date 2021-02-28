@@ -1,28 +1,27 @@
-import {showAlert} from './utils.js';
-import {createDescriptionsCards} from './popup.js';
-import {addMapDescriptionsMarkersPopup} from './map.js';
+const urlGetData = 'https://22.javascript.pages.academy/keksobooking/data';
+const urlSendData = 'https://22.javascript.pages.academy/keksobooking';
 
-const getData = () => {
-  fetch('https://22.javascript.pages.academy/keksobooking/data')
+const getData = (onSuccess, onError) => {
+  fetch(urlGetData)
     .then((response) => {
       if (response.ok) {
         return response.json();
       } else {
-        showAlert('Ошибка при загрузке данных. Попробуйте еще раз');
+        onError();
       }
     })
     .then((descriptions) => {
-      addMapDescriptionsMarkersPopup(descriptions, createDescriptionsCards(descriptions));
+      onSuccess(descriptions);
     })
     .catch(() => {
-      showAlert('Ошибка при загрузке данных. Попробуйте еще раз');
+      onError();
     });
 };
 
 const sendData = (formData, onSuccess, onError) => {
 
   fetch(
-    'https://22.javascript.pages.academy/keksobooking',
+    urlSendData,
     {
       method: 'POST',
       body: formData,
