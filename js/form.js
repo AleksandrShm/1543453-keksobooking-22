@@ -56,7 +56,8 @@ const showAndHideSuccessPopup = (timeToHide) => {
 
 // сбрасывает форму, вызывает функцию показа сообщения success
 const onSuccessClear = () => {
-  showAndHideSuccessPopup(2000);
+  const TIME_SHOW = 2000
+  showAndHideSuccessPopup(TIME_SHOW);
   resetForm();
 };
 

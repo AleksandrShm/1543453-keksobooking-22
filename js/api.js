@@ -4,7 +4,7 @@ const URL_GET_DATA = 'https://22.javascript.pages.academy/keksobooking/data';
 const URL_SEND_DATA = 'https://22.javascript.pages.academy/keksobooking';
 
 const onErrorGetDataShowAlert = () => {
-  showAlert('Ошибка при загрузке данных. Попробуйте еще раз');
+  showAlert('Ошибка загрузки данных. Попробуйте еще раз');
 };
 
 const getData = (onSuccess, onError) => {
@@ -13,7 +13,8 @@ const getData = (onSuccess, onError) => {
       if (response.ok) {
         return response.json();
       } else {
-        onError();
+        // бросаем исключение, если статус response не ok, управление переходит в .catch (туда передается брошенный Error, его можно обработать)
+        throw new Error(`Error. HTTP response status code ${response.status}`);
       }
     })
     .then((descriptions) => {
@@ -37,7 +38,7 @@ const sendData = (formData, onSuccess, onError) => {
     if (response.ok) {
       onSuccess();
     } else {
-      onError();
+      throw new Error(`Error. HTTP response status code ${response.status}`);
     }
   })
     .catch(() => {
