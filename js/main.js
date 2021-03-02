@@ -1,3 +1,7 @@
-import './popup.js';
-import './map.js';
-import './form.js';
+import {setUserFormSubmit, onSuccessClear, showError} from './form.js';
+import {getData, onErrorGetDataShowAlert} from './api.js';
+import {onSuccessAddDescriptions} from './map.js';
+
+getData(onSuccessAddDescriptions, onErrorGetDataShowAlert);
+
+setUserFormSubmit(onSuccessClear, showError);

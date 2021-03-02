@@ -1,3 +1,6 @@
+import {resetAddress} from './map.js';
+import {sendData} from './api.js';
+
 const minPlacePrices = {
   flat: '1000',
   bungalow: '0',
@@ -14,7 +17,14 @@ const setMinPrice = (value) => {
   priceInput.setAttribute('min', minPlacePrices[value]);
 }
 
-setMinPrice('flat');
+// сбрасывает к первоначальным значениям поля формы и адрес с маркером на карте
+const resetForm = () => {
+  form.reset();
+  setMinPrice('flat');
+  resetAddress();
+};
+
+resetForm();
 
 placesTypeSelect.addEventListener('change', (evt) => {
   setMinPrice(evt.target.value);
@@ -32,3 +42,50 @@ timeInSelect.addEventListener('change', (evt) => {
 timeOutSelect.addEventListener('change', (evt) => {
   timeInSelect.value = evt.target.value;
 });
+
+// показывает сообщение success об удачной отправке данных, затем скрывает через переданное время в мс
+const showAndHideSuccessPopup = (timeToHide) => {
+  const successPopupTemplate = document.querySelector('#success').content;
+  const successPopup = successPopupTemplate.querySelector('div').cloneNode(true);
+  document.body.appendChild(successPopup);
+
+  setTimeout(() => {
+    document.body.removeChild(successPopup);
+  }, timeToHide);
+};
+
+// сбрасывает форму, вызывает функцию показа сообщения success
+const onSuccessClear = () => {
+  const TIME_SHOW = 2000
+  showAndHideSuccessPopup(TIME_SHOW);
+  resetForm();
+};
+
+// выводит сообщение error о неудачной отправке данных
+const showError = () => {
+  const errorPopupTemplate = document.querySelector('#error').content;
+  const errorPopup = errorPopupTemplate.querySelector('div').cloneNode(true);
+  const closePopupButton = errorPopup.querySelector('.error__button');
+  document.body.appendChild(errorPopup);
+  closePopupButton.addEventListener('click', () => {
+    document.body.removeChild(errorPopup);
+  });
+};
+
+// отправляет данные формы, в случае успеха выполняет onSuccess(), неуспеха onError()
+const setUserFormSubmit = (onSuccess, onError) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const formData = new FormData(evt.target);
+    sendData(formData, onSuccess, onError);
+  });
+}
+
+// кнопка сброса формы
+const clearButtonForm = form.querySelector('.ad-form__reset');
+clearButtonForm.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetForm();
+});
+
+export {setUserFormSubmit, onSuccessClear, showError};
