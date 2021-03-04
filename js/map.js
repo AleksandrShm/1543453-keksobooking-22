@@ -22,6 +22,7 @@ const adFormFieldsets = adForm.querySelectorAll('fieldset');
 const mapFilters = document.querySelector('.map__filters');
 const mapFiltersSelects = mapFilters.querySelectorAll('select');
 const mapFiltersFieldsets = mapFilters.querySelectorAll('fieldset');
+const markersArr = [];
 
 // функция делает недоступными интерактивные элементы страницы, добавляет класс неактивного состояния
 const deactivatePage = () => {
@@ -32,14 +33,21 @@ const deactivatePage = () => {
   setElementsDisabled(mapFiltersFieldsets);
 };
 
-// функция, обратная deactivatePage - интерактивные элементы становятся доступными, удаляет класс неактивного состояния
+// функция, обратная deactivatePage - интерактивные элементы становятся доступными, кроме поля выбора фильтров
 const activatePage = () => {
   adForm.classList.remove('ad-form--disabled');
   removeElementsDisabled(adFormFieldsets);
+  //mapFilters.classList.remove('map__filters--disabled');
+  //removeElementsDisabled(mapFiltersSelects);
+  //removeElementsDisabled(mapFiltersFieldsets);
+};
+
+// активирует поле фильтров объявлений
+const activateFilters = () => {
   mapFilters.classList.remove('map__filters--disabled');
   removeElementsDisabled(mapFiltersSelects);
   removeElementsDisabled(mapFiltersFieldsets);
-};
+}
 
 // выполняется функция action при завершении инициализации 'load' карты map
 const onLoadMapEvent = (map, action) => {
@@ -83,6 +91,7 @@ const addMapDescriptionsMarkersPopup = (descriptions, popups) => {
         icon,
       },
     );
+    markersArr.push(marker);
     marker.addTo(map).bindPopup(popups.childNodes[index],
       {
         keepInView: true,
@@ -142,4 +151,14 @@ const onSuccessAddDescriptions = (descriptions) => {
   addMapMarkersWithPopups(descriptions);
 };
 
-export {resetAddress, onSuccessAddDescriptions};
+// удаляет все маркеры объявлений с карты, закрывает открытые popup и отвязывает все popup от marker
+const removeMarkers = () => {
+  markersArr.forEach(marker => {
+    marker.closePopup();
+    marker.unbindPopup();
+    marker.removeFrom(map);
+  });
+  markersArr.splice(0, markersArr.length - 1);
+}
+
+export {resetAddress, onSuccessAddDescriptions, addMapMarkersWithPopups, removeMarkers, activateFilters};

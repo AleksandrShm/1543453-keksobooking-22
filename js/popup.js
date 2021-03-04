@@ -33,6 +33,10 @@ const createListPhotos = (photos) => {
 }
 
 const createDescriptionsCards = (lodgingDescriptions) => {
+  // удаляем созданные ранее карточки объявлений, если есть
+  if (cards.firstChild) {
+    clearAllChild(cards);
+  }
   lodgingDescriptions.forEach((lodgingDescriptionItem, index) => {
     const cardElement = card.cloneNode(true);
     const {author, offer} = lodgingDescriptionItem;
