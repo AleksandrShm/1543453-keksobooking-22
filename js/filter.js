@@ -6,12 +6,7 @@ const typeSelect = formFilters.querySelector('#housing-type');
 const priceSelect = formFilters.querySelector('#housing-price');
 const roomsSelect = formFilters.querySelector('#housing-rooms');
 const guestsSelect = formFilters.querySelector('#housing-guests');
-const wifiCheckbox = formFilters.querySelector('#filter-wifi');
-const dishwasherCheckbox = formFilters.querySelector('#filter-dishwasher');
-const parkingCheckbox = formFilters.querySelector('#filter-parking');
-const washerCheckbox = formFilters.querySelector('#filter-washer');
-const elevatorCheckbox = formFilters.querySelector('#filter-elevator');
-const conditionerCheckbox = formFilters.querySelector('#filter-conditioner');
+const featureCheckboxes = [...formFilters.querySelectorAll('.map__checkbox')];
 
 const PRICE_MIDDLE_MIN = 10000;
 const PRICE_MIDDLE_MAX = 50000;
@@ -29,16 +24,15 @@ const filter = () => {
   if (typeSelect.value !== 'any') {
     filteredDataArr = filteredDataArr.filter(item => item.offer.type === typeSelect.value);
   }
-  if (priceSelect.value !== 'any') {
-    if (priceSelect.value === 'middle') {
+  switch (priceSelect.value) {
+    case 'middle':
       filteredDataArr = filteredDataArr.filter(item => item.offer.price >= PRICE_MIDDLE_MIN && item.offer.price <= PRICE_MIDDLE_MAX);
-    }
-    if (priceSelect.value === 'low') {
+      break;
+    case 'low':
       filteredDataArr = filteredDataArr.filter(item => item.offer.price < PRICE_MIDDLE_MIN);
-    }
-    if (priceSelect.value === 'high') {
+      break;
+    case 'high':
       filteredDataArr = filteredDataArr.filter(item => item.offer.price > PRICE_MIDDLE_MAX);
-    }
   }
   if (roomsSelect.value !== 'any') {
     filteredDataArr = filteredDataArr.filter(item => item.offer.rooms === +roomsSelect.value);
@@ -46,30 +40,15 @@ const filter = () => {
   if (guestsSelect.value !== 'any') {
     filteredDataArr = filteredDataArr.filter(item => item.offer.guests === +guestsSelect.value);
   }
-  filteredDataArr = filterCheckbox(wifiCheckbox, filteredDataArr);
-  filteredDataArr = filterCheckbox(dishwasherCheckbox, filteredDataArr);
-  filteredDataArr = filterCheckbox(parkingCheckbox, filteredDataArr);
-  filteredDataArr = filterCheckbox(washerCheckbox, filteredDataArr);
-  filteredDataArr = filterCheckbox(elevatorCheckbox, filteredDataArr);
-  filteredDataArr = filterCheckbox(conditionerCheckbox, filteredDataArr);
+  
+  featureCheckboxes.forEach(checkbox => {
+    filteredDataArr = filterCheckbox(checkbox, filteredDataArr)
+  });
   addMapMarkersWithPopups(filteredDataArr);
 };
 
-const formSelects = [...formFilters.querySelectorAll('select')];
-const formCheckboxes = [...formFilters.querySelectorAll('input')];
-
-formSelects.forEach((element) => {
-  element.addEventListener('change', (evt) => {
-    evt.preventDefault();
-    removeMarkers();
-    filter();
-  });
-});
-
-formCheckboxes.forEach((element)  => {
-  element.addEventListener('change', (evt) => {
-    evt.preventDefault();
-    removeMarkers();
-    filter();
-  });
+formFilters.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  removeMarkers();
+  filter();
 });

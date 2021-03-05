@@ -37,9 +37,6 @@ const deactivatePage = () => {
 const activatePage = () => {
   adForm.classList.remove('ad-form--disabled');
   removeElementsDisabled(adFormFieldsets);
-  //mapFilters.classList.remove('map__filters--disabled');
-  //removeElementsDisabled(mapFiltersSelects);
-  //removeElementsDisabled(mapFiltersFieldsets);
 };
 
 // активирует поле фильтров объявлений
@@ -142,8 +139,13 @@ mainPinMarker.on('move', (evt) => {
   address.value = `${(newAddressForm.lat).toFixed(5)}, ${(newAddressForm.lng).toFixed(5)}`;
 });
 
-// добавляет на карту маркеры с прикрепленными popups, принимает параметр descriptions
+// добавляет на карту маркеры с прикрепленными popups, принимает параметр descriptions, выводит не более DESCRIPTIONS_LIMIT объявлений
 const addMapMarkersWithPopups = (descriptions) => {
+  activateFilters();
+  const DESCRIPTIONS_LIMIT = 10;
+  if (descriptions.length > DESCRIPTIONS_LIMIT) {
+    descriptions = descriptions.slice(0, DESCRIPTIONS_LIMIT);
+  }
   addMapDescriptionsMarkersPopup(descriptions, createDescriptionsCards(descriptions));
 };
 
