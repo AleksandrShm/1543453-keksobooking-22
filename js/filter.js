@@ -1,6 +1,10 @@
-import {loadingDataArr} from './api.js';
-import {addMapMarkersWithPopups, removeMarkers} from './map.js';
+import {getData, onErrorGetDataShowAlert} from './api.js';
+import {addMapMarkersWithPopups} from './map.js';
+import {debounce} from './utils.js';
 
+const PRICE_MIDDLE_MIN = 10000;
+const PRICE_MIDDLE_MAX = 50000;
+const DEBOUNCE_MS = 500;
 const formFilters = document.querySelector('.map__filters');
 const typeSelect = formFilters.querySelector('#housing-type');
 const priceSelect = formFilters.querySelector('#housing-price');
@@ -8,47 +12,45 @@ const roomsSelect = formFilters.querySelector('#housing-rooms');
 const guestsSelect = formFilters.querySelector('#housing-guests');
 const featureCheckboxes = [...formFilters.querySelectorAll('.map__checkbox')];
 
-const PRICE_MIDDLE_MIN = 10000;
-const PRICE_MIDDLE_MAX = 50000;
-
-const filterCheckbox = (checkbox, filteredDataArr) => {
+const filterCheckbox = (checkbox, filteredData) => {
   if (checkbox.checked === true) {
-    return filteredDataArr.filter(item => item.offer.features.includes(checkbox.value));
+    return filteredData.filter(item => item.offer.features.includes(checkbox.value));
   } else {
-    return filteredDataArr;
+    return filteredData;
   }
 }
 
-const filter = () => {
-  let filteredDataArr = loadingDataArr.slice();
+const filter = (filteredData) => {
   if (typeSelect.value !== 'any') {
-    filteredDataArr = filteredDataArr.filter(item => item.offer.type === typeSelect.value);
+    filteredData = filteredData.filter(item => item.offer.type === typeSelect.value);
   }
   switch (priceSelect.value) {
     case 'middle':
-      filteredDataArr = filteredDataArr.filter(item => item.offer.price >= PRICE_MIDDLE_MIN && item.offer.price <= PRICE_MIDDLE_MAX);
+      filteredData = filteredData.filter(item => item.offer.price >= PRICE_MIDDLE_MIN && item.offer.price <= PRICE_MIDDLE_MAX);
       break;
     case 'low':
-      filteredDataArr = filteredDataArr.filter(item => item.offer.price < PRICE_MIDDLE_MIN);
+      filteredData = filteredData.filter(item => item.offer.price < PRICE_MIDDLE_MIN);
       break;
     case 'high':
-      filteredDataArr = filteredDataArr.filter(item => item.offer.price > PRICE_MIDDLE_MAX);
+      filteredData = filteredData.filter(item => item.offer.price > PRICE_MIDDLE_MAX);
   }
   if (roomsSelect.value !== 'any') {
-    filteredDataArr = filteredDataArr.filter(item => item.offer.rooms === +roomsSelect.value);
+    filteredData = filteredData.filter(item => item.offer.rooms === +roomsSelect.value);
   }
   if (guestsSelect.value !== 'any') {
-    filteredDataArr = filteredDataArr.filter(item => item.offer.guests === +guestsSelect.value);
+    filteredData = filteredData.filter(item => item.offer.guests === +guestsSelect.value);
   }
-  
+
   featureCheckboxes.forEach(checkbox => {
-    filteredDataArr = filterCheckbox(checkbox, filteredDataArr)
+    filteredData = filterCheckbox(checkbox, filteredData)
   });
-  addMapMarkersWithPopups(filteredDataArr);
+
+  addMapMarkersWithPopups(filteredData);
 };
 
-formFilters.addEventListener('change', (evt) => {
+const onChangeFormFilter = (evt) => {
   evt.preventDefault();
-  removeMarkers();
-  filter();
-});
+  getData(filter, onErrorGetDataShowAlert);
+}
+
+formFilters.addEventListener('change', debounce(onChangeFormFilter, DEBOUNCE_MS));

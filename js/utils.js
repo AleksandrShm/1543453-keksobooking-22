@@ -1,3 +1,6 @@
+const ALERT_SHOWN_TIME = 5000;
+const ALERT_CONTAINER_STYLES_CSS = 'z-index: 100; position: absolute; left: 0; top: 0; right: 0; padding: 10px 3px; font-size: 30px; text-align: center; background-color: red;';
+
 // Возвращает случайное целое число из переданного диапазона включительно
 const getRandomInt = (min, max) => {
   // если min, max не число, взвращаем NaN
@@ -62,11 +65,10 @@ const removeElementsDisabled = (elements) => {
 };
 
 // показывает переданное сообщение message, убирает через  ALERT_SHOWN_TIME
-const ALERT_SHOWN_TIME = 5000;
 
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
-  const ALERT_CONTAINER_STYLES_CSS = 'z-index: 100; position: absolute; left: 0; top: 0; right: 0; padding: 10px 3px; font-size: 30px; text-align: center; background-color: red;';
+
   alertContainer.style.cssText = ALERT_CONTAINER_STYLES_CSS;
 
   alertContainer.textContent = message;
@@ -78,4 +80,12 @@ const showAlert = (message) => {
   }, ALERT_SHOWN_TIME);
 }
 
-export {getRandomInt, getRandomFloat, getRandomArray, clearAllChild, setElementsDisabled, removeElementsDisabled, showAlert};
+const debounce = (func, delay) => {
+  let timeout;
+  return function () {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, arguments), delay);
+  };
+}
+
+export {getRandomInt, getRandomFloat, getRandomArray, clearAllChild, setElementsDisabled, removeElementsDisabled, showAlert, debounce};

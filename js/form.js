@@ -88,4 +88,54 @@ clearButtonForm.addEventListener('click', (evt) => {
   resetForm();
 });
 
+const roomNumber = form.querySelector('#room_number');
+const capacity = form.querySelector('#capacity');
+const errorCapacityMessage = 'Неверное количество гостей';
+
+// проверяет соответствие количества комнат с количеством гостей
+const checkCapacity = (roomNumberValue, capacityValue) => {
+  switch (roomNumberValue) {
+    case '1':
+      if (capacityValue === '1') {
+        capacity.setCustomValidity('');
+      } else {
+        capacity.setCustomValidity(errorCapacityMessage);
+      }
+      break;
+
+    case '2':
+      if (capacityValue === '1' || capacityValue === '2') {
+        capacity.setCustomValidity('');
+      } else {
+        capacity.setCustomValidity(errorCapacityMessage);
+      }
+      break;
+
+    case '3':
+      if (capacityValue === '1' || capacityValue === '2' || capacityValue === '3') {
+        capacity.setCustomValidity('');
+      } else {
+        capacity.setCustomValidity(errorCapacityMessage);
+      }
+      break;
+
+    case '100':
+      if (capacityValue === '0') {
+        capacity.setCustomValidity('');
+      } else {
+        capacity.setCustomValidity(errorCapacityMessage);
+      }
+  }
+};
+
+roomNumber.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  checkCapacity(roomNumber.value, capacity.value);
+});
+
+capacity.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  checkCapacity(roomNumber.value, capacity.value);
+});
+
 export {setUserFormSubmit, onSuccessClear, showError};

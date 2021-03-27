@@ -2,11 +2,12 @@
 import {setElementsDisabled, removeElementsDisabled} from './utils.js';
 import {createDescriptionsCards} from './popup.js';
 
+const DESCRIPTIONS_LIMIT = 10;
 const CENTER_LATITUDE = 35.68000;
 const CENTER_LONGITUDE = 139.76000;
 const MAP_SCALE = 9;
-const tileLayerUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const tileLayerCopyRight = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+const TILE_LAYER_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const TILE_LAYER_COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 const mainIconImage = {
   url: '../img/main-pin.svg',
   size: [52, 52],
@@ -22,7 +23,7 @@ const adFormFieldsets = adForm.querySelectorAll('fieldset');
 const mapFilters = document.querySelector('.map__filters');
 const mapFiltersSelects = mapFilters.querySelectorAll('select');
 const mapFiltersFieldsets = mapFilters.querySelectorAll('fieldset');
-const markersArr = [];
+const markers = [];
 
 // функция делает недоступными интерактивные элементы страницы, добавляет класс неактивного состояния
 const deactivatePage = () => {
@@ -88,7 +89,7 @@ const addMapDescriptionsMarkersPopup = (descriptions, popups) => {
         icon,
       },
     );
-    markersArr.push(marker);
+    markers.push(marker);
     marker.addTo(map).bindPopup(popups.childNodes[index],
       {
         keepInView: true,
@@ -101,7 +102,7 @@ deactivatePage();
 const map = L.map('map-canvas');
 onLoadMapEvent(map, activatePage);
 setViewMap(map, CENTER_LATITUDE, CENTER_LONGITUDE, MAP_SCALE);
-addTileLayerMap(map, tileLayerUrl, tileLayerCopyRight);
+addTileLayerMap(map, TILE_LAYER_URL, TILE_LAYER_COPYRIGHT);
 
 const mainPinIcon = L.icon({
   iconUrl: mainIconImage.url,
@@ -141,8 +142,8 @@ mainPinMarker.on('move', (evt) => {
 
 // добавляет на карту маркеры с прикрепленными popups, принимает параметр descriptions, выводит не более DESCRIPTIONS_LIMIT объявлений
 const addMapMarkersWithPopups = (descriptions) => {
+  removeMarkers();
   activateFilters();
-  const DESCRIPTIONS_LIMIT = 10;
   if (descriptions.length > DESCRIPTIONS_LIMIT) {
     descriptions = descriptions.slice(0, DESCRIPTIONS_LIMIT);
   }
@@ -155,12 +156,12 @@ const onSuccessAddDescriptions = (descriptions) => {
 
 // удаляет все маркеры объявлений с карты, закрывает открытые popup и отвязывает все popup от marker
 const removeMarkers = () => {
-  markersArr.forEach(marker => {
+  markers.forEach(marker => {
     marker.closePopup();
     marker.unbindPopup();
     marker.removeFrom(map);
   });
-  markersArr.splice(0, markersArr.length - 1);
+  markers.splice(0, markers.length - 1);
 }
 
-export {resetAddress, onSuccessAddDescriptions, addMapMarkersWithPopups, removeMarkers, activateFilters};
+export {resetAddress, onSuccessAddDescriptions, addMapMarkersWithPopups, activateFilters};

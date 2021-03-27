@@ -1,18 +1,17 @@
 import {clearAllChild} from './utils.js';
 import {ALL_FEATURES} from './data.js';
 
+const PLACES_MAP = {
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+};
 const templateCard = document.querySelector('#card').content;
 const card = templateCard.querySelector('article');
 const cards = document.createDocumentFragment();
 const listFeatures = templateCard.querySelector('.popup__features');
 const templatePhoto = templateCard.querySelector('.popup__photo');
-
-const placesMap = {
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-}
 
 const createListFeatures = (features) => {
   const fragmentFeatures = document.createDocumentFragment();
@@ -56,7 +55,7 @@ const createDescriptionsCards = (lodgingDescriptions) => {
     popupTitle.textContent = title;
     popupTextAddress.textContent = address;
     popupTextPrice.textContent = `${price} ₽/ночь`;
-    popupType.textContent = placesMap[type];
+    popupType.textContent = PLACES_MAP[type];
     popupTextCapacity.textContent = `${rooms} комнаты для ${guests} гостей`;
     popupTextTime.textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
     //удаляем шаблонные features из склонированного шаблона функцией clearAllChild

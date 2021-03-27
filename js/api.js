@@ -2,7 +2,6 @@ import {showAlert} from './utils.js';
 
 const URL_GET_DATA = 'https://22.javascript.pages.academy/keksobooking/data';
 const URL_SEND_DATA = 'https://22.javascript.pages.academy/keksobooking';
-let loadingDataArr = [];
 
 const onErrorGetDataShowAlert = () => {
   showAlert('Ошибка загрузки данных. Попробуйте еще раз');
@@ -19,7 +18,6 @@ const getData = (onSuccess, onError) => {
       }
     })
     .then((descriptions) => {
-      loadingDataArr = descriptions.slice();
       onSuccess(descriptions);
     })
     .catch(() => {
@@ -48,4 +46,4 @@ const sendData = (formData, onSuccess, onError) => {
     })
 }
 
-export {getData, sendData, onErrorGetDataShowAlert, loadingDataArr};
+export {getData, sendData, onErrorGetDataShowAlert};
